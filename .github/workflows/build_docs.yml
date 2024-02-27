@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build-notebooks:
     runs-on: ubuntu-latest
+    timeout-minutes: 1 # Testing for 1 min
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,7 +24,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -e ".[docs]"
       - name: Build notebooks
         run: |
           make html
