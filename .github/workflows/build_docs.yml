@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build-notebooks:
     runs-on: ubuntu-latest
+    timeout-minutes: 1 # Set the timeout for the entire workflow to 1 minute (60 seconds)
     steps:
       - uses: actions/checkout@v4
         with:
