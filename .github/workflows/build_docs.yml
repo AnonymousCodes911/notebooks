@@ -23,7 +23,6 @@ jobs:
 
       - name: Checkout PR version of notebooks
         run: |
-          cd ./stingray/notebooks  # Change to the submodule directory
           git fetch origin pull/${{ github.event.pull_request.number }}/head:PR_${{ github.event.pull_request.number }}
           git checkout PR_${{ github.event.pull_request.number }}
           
