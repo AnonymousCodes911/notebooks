@@ -19,8 +19,7 @@ jobs:
         with:
           repository: StingraySoftware/stingray
           path: ./stingray
-          submodules: recursive
-
+          submodules: true
       - name: Get the latest commit of the PR
         id: pr_commit
         run: |
