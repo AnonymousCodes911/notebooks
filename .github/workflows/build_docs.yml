@@ -19,7 +19,7 @@ jobs:
         with:
           repository: StingraySoftware/stingray
           path: ./stingray
-          submodules: true
+          submodules: recursive
 
       - name: Print current directory
         run: |
