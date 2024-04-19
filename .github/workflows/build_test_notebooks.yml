@@ -20,6 +20,7 @@ jobs:
           repository: StingraySoftware/stingray
           path: ./stingray
           submodules: recursive
+
       - name: Get latest commit of the PR or pushed commit and Checkout PR version of notebooks
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
