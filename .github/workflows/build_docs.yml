@@ -27,6 +27,9 @@ jobs:
           pwd
           git fetch origin ${{ steps.pr_commit.outputs.commit }}:pr_temp
           git checkout pr_temp
+      - name: Verify submodule update
+        run: |
+          git log -1
 
       - name: Setup Python
         uses: actions/setup-python@v5
