@@ -34,7 +34,7 @@ jobs:
       - name: Checkout PR version of notebooks
         run: |
           pwd 
-          cd ./stingray/notebooks  # Change to the submodule directory
+          cd ./stingray/docs/notebooks   # Change to the submodule directory
           pwd  # Print current directory for debugging
           git fetch origin ${GITHUB_SHA}:pr_temp
           git checkout pr_temp
