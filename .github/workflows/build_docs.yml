@@ -24,25 +24,22 @@ jobs:
       - name: Get latest commit of the PR
         id: pr_commit
         run: |
-          echo "::set-output name=commit::$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .head.sha)"
-
-      - name: Check if PR_SHA is null
-        run: |
-          if [ -z "${{ steps.pr_commit.outputs.commit }}" ]; then
-            echo "::error::Commit hash is null"
+          PR_SHA=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .head.sha)
+          if [ "$PR_SHA" == "null" ]; then
+            echo "::error::Failed to get PR SHA"
             exit 1
           fi
+          echo "::set-output name=commit::$PR_SHA"
 
       - name: Checkout PR version of notebooks
         run: |
           cd ./stingray/docs/notebooks # Change to the submodule directory
           pwd
-          PR_SHA=${{ steps.pr_commit.outputs.commit }}
-          git fetch origin $PR_SHA:pr_temp
+          git fetch origin ${{ steps.pr_commit.outputs.commit }}:pr_temp
           git checkout pr_temp
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
