@@ -21,6 +21,11 @@ jobs:
           path: ./stingray
           submodules: true
 
+      - name: Print current directory
+        run: |
+          pwd
+          ls ./stingray  # List contents of the stingray directory for reference
+
       - name: Get latest commit of the PR
         id: pr_commit
         run: |
@@ -28,9 +33,15 @@ jobs:
 
       - name: Checkout PR version of notebooks
         run: |
+          pwd 
           cd ./stingray/notebooks  # Change to the submodule directory
+          pwd  # Print current directory for debugging
           git fetch origin ${GITHUB_SHA}:pr_temp
           git checkout pr_temp
+
+      - name: Print updated commit hash
+        run: |
+          echo "Updated commit hash: ${{ steps.pr_commit.outputs.commit }}"
 
       - name: Setup Python
         uses: actions/setup-python@v5
