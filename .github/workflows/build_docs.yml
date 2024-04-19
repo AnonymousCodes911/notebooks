@@ -22,13 +22,11 @@ jobs:
           submodules: true
 
       - name: Get latest commit of the PR
-        if: github.event_name == 'pull_request'
         id: pr_commit
         run: |
           echo "::set-output name=commit::$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .head.sha)"
 
       - name: Checkout PR version of notebooks
-        if: github.event_name == 'pull_request'
         run: |
           cd ./stingray/notebooks  # Change to the submodule directory
           git fetch origin ${GITHUB_SHA}:pr_temp
