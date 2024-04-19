@@ -20,30 +20,29 @@ jobs:
           repository: StingraySoftware/stingray
           path: ./stingray
           submodules: recursive
-      - name: Get the latest commit of the PR
+
+      - name: Get latest commit of the PR
         id: pr_commit
         run: |
-          PR_SHA=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .head.sha)
-          if [ -z "$PR_SHA" ]; then
-            echo "::error::Failed to retrieve commit hash of the PR"
-            exit 1
-          fi
-          echo "::set-output name=commit::$PR_SHA"
+          echo "::set-output name=commit::$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .head.sha)"
 
-      - name: Checkout PR version of notebooks
+      - name: Check if PR_SHA is null
         run: |
-          PR_SHA=${{ steps.pr_commit.outputs.commit }}
-          if [ -z "$PR_SHA" ]; then
+          if [ -z "${{ steps.pr_commit.outputs.commit }}" ]; then
             echo "::error::Commit hash is null"
             exit 1
           fi
-          cd ./stingray/docs/notebooks  # Change to the submodule directory
+
+      - name: Checkout PR version of notebooks
+        run: |
+          cd ./stingray/docs/notebooks # Change to the submodule directory
           pwd
+          PR_SHA=${{ steps.pr_commit.outputs.commit }}
           git fetch origin $PR_SHA:pr_temp
           git checkout pr_temp
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v2
         with:
           python-version: '3.10'
 
@@ -51,11 +50,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y pandoc fonts-freefont-ttf
-
+          pip install sphinx sphinx-astropy tox
+          
       - name: Install Stingray
         run: |
           pip install -e ./stingray
-     
+
       - name: Run Build Docs
         run: |
           cd ./stingray
