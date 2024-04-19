@@ -21,7 +21,7 @@ jobs:
           path: ./stingray
           submodules: recursive
 
-      - name: Get latest commit of the PR
+      - name: Get the latest commit of the PR
         id: pr_commit
         run: |
           PR_SHA=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .head.sha)
